@@ -19,6 +19,23 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// fetch only one laptop by ID
+app.get("/data/:id", async (req, res) => {
+  const laptopId = req.params.id;
+  try {
+    const laptop = await Laptop.findById(laptopId);
+    if (!laptop) {
+      return res.status(404).json({ error: "Laptop not found" });
+    }
+    res.json(laptop);
+  } catch (error) {
+    console.error("Database error:", error);
+    res
+      .status(500)
+      .json({ error: "Database connection error", details: error.message });
+  }
+});
+
 // fetch all laptop data
 app.get("/data", async (req, res) => {
   try {
@@ -69,6 +86,40 @@ app.post("/add-laptop", async (req, res) => {
   }
 });
 
+// update a laptop entry
+app.put("/update-laptop/:id", async (req, res) => {
+  const laptopId = req.params.id;
+  const updateData = req.body;
+  try {
+    const updatedLaptop = await Laptop.findByIdAndUpdate(laptopId, updateData, {
+      new: true,
+    });
+    if (!updatedLaptop) {
+      return res.status(404).json({ error: "Laptop not found" });
+    }
+    res.json({ message: "Laptop updated successfully", laptop: updatedLaptop });
+  } catch (error) {
+    console.error("Error updating laptop:", error);
+    res.status(500).json({ error: "Failed to update laptop" });
+  }
+});
+
+// delete a laptop entry
+app.delete("/delete-laptop/:id", async (req, res) => {
+  const laptopId = req.params.id;
+  try {
+    const deletedLaptop = await Laptop.findByIdAndDelete(laptopId);
+    if (!deletedLaptop) {
+      return res.status(404).json({ error: "Laptop not found" });
+    }
+    res.json({ message: "Laptop deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting laptop:", error);
+    res.status(500).json({ error: "Failed to delete laptop" });
+  }
+});
+
+// start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
