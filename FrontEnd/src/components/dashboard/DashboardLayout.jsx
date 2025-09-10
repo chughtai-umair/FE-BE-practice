@@ -12,53 +12,81 @@ const DashboardLayout = () => {
   };
 
   const sidebarItems = [
-    { path: "/dashboard", icon: "📊", label: "Overview" },
-    { path: "/dashboard/laptops", icon: "💻", label: "Laptops" },
+    { path: "/dashboard", icon: "📊", label: "Dashboard" },
+    { path: "/dashboard/laptops", icon: "💻", label: "All Laptops" },
     { path: "/dashboard/add-laptop", icon: "➕", label: "Add Laptop" },
   ];
-
   return (
-    <div className="h-screen w-screen bg-gray-50 flex overflow-hidden">
+    <div className="h-screen w-screen bg-gray-100 flex overflow-hidden">
       {/* Sidebar */}
       <div
         className={`${
-          isSidebarOpen ? "w-72" : "w-20"
-        } bg-gradient-to-b from-slate-900 via-blue-900 to-indigo-900 transition-all duration-300 flex flex-col shadow-2xl`}
+          isSidebarOpen ? "w-64" : "w-16"
+        } bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-sm`}
       >
         {/* Sidebar Header */}
-        <div className="p-6 border-b border-white/20">
+        <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             {isSidebarOpen && (
               <div>
-                <h2 className="text-2xl font-bold text-white">Dashboard</h2>
-                <p className="text-blue-200 text-sm">Laptop Management</p>
+                <h2 className="text-lg font-bold text-gray-900">
+                  Laptop Store
+                </h2>
+                <p className="text-gray-500 text-xs">Management System</p>
               </div>
             )}
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="text-white p-2 rounded-lg hover:bg-white/10 transition duration-200"
+              className="text-gray-500 p-1.5 rounded-md hover:bg-gray-100 transition duration-200"
             >
-              {isSidebarOpen ? "◀" : "▶"}
+              {isSidebarOpen ? (
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                  />
+                </svg>
+              )}
             </button>
           </div>
-        </div>
-
+        </div>{" "}
         {/* Navigation Items */}
-        <nav className="flex-1 p-4">
-          <ul className="space-y-3">
+        <nav className="flex-1 p-3">
+          <ul className="space-y-1">
             {sidebarItems.map((item) => (
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center p-4 rounded-xl transition-all duration-200 ${
+                  className={`flex items-center p-3 rounded-lg transition-all duration-200 ${
                     location.pathname === item.path
-                      ? "bg-white/20 text-white shadow-lg"
-                      : "text-blue-100 hover:bg-white/10 hover:text-white"
+                      ? "bg-blue-50 text-blue-700 border-r-2 border-blue-700"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                 >
-                  <span className="text-2xl">{item.icon}</span>
+                  <span className="text-lg">{item.icon}</span>
                   {isSidebarOpen && (
-                    <span className="ml-4 font-medium text-lg">
+                    <span className="ml-3 font-medium text-sm">
                       {item.label}
                     </span>
                   )}
@@ -67,7 +95,6 @@ const DashboardLayout = () => {
             ))}
           </ul>
         </nav>
-
         {/* User Info & Logout */}
         <div className="p-4 border-t border-white/20">
           {isSidebarOpen && (

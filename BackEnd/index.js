@@ -1,5 +1,6 @@
 // express setup
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = 3000;
 const path = require("path");
@@ -7,13 +8,34 @@ const path = require("path");
 const Laptop = require("./model/laptop");
 const { connectToDB } = require("./initDb");
 
+// Enable CORS for all routes
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Vite default port
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 // MIDDLEWARE to parse body
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-connectToDB();
+// Connect to database and wait for connection
+async function startServer() {
+  try {
+    await connectToDB();
+    console.log("Database connected successfully!");
+
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+  }
+}
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -119,7 +141,5 @@ app.delete("/delete-laptop/:id", async (req, res) => {
   }
 });
 
-// start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// Call startServer instead of app.listen
+startServer();

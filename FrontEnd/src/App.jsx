@@ -8,7 +8,7 @@ import DashboardLayout from "./components/dashboard/DashboardLayout";
 import LaptopList from "./components/dashboard/LaptopList";
 import AddLaptop from "./components/dashboard/AddLaptop";
 import reactLogo from "./assets/react.svg";
-import "./App.css";
+import "./index.css";
 
 const Home = () => (
   <div className="h-screen w-screen bg-gradient-to-br from-indigo-900 via-blue-900 to-purple-900 flex items-center justify-center overflow-hidden">
